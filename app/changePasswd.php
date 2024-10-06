@@ -83,12 +83,12 @@ function savePassword() {
   if(! $acct)
     return warning(_('No user account available; unable to change password.'));
 
-  if(! $revert && ! isset($_SESSION['tmpLogin']) && crypt( $oldpassword, $acct['passwd']) != $acct['passwd']) {
+  if(! $revert && ! isset($_SESSION['tmpLogin']) && !password_verify($oldpassword, $acct['passwd'])) {
     addWarningMessage(_('You did not enter your old password correctly'));
     redirect('changePassword');
   }
       
-  $passwd = empty( $password ) ? '' : crypt($password);
+  $passwd = empty($password) ? '' : password_hash($password, PASSWORD_DEFAULT);
   checked_mysql_query('update User set passwd = ' . quote_smart($passwd)
 		      . ', lastChanged=now()'
 		      . " where userID = $userID" );

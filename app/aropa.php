@@ -610,11 +610,15 @@ function AnonymiseAuthor( &$madeByMap, $author, $prefix ) {
   if( $author == $_SESSION['userID'] )
     return '(you)';
 
-  if( ! isset( $madeByMap[ $author ] ) ) {
-    $nextAuthor = count( $madeByMap ) + 1;
-    $madeByMap[ $author ] = $nextAuthor;
+  if (empty($madeByMap))
+    $madeByMap = array();
+  
+  if (!isset($madeByMap[$author])) {
+    $nextAuthor = count($madeByMap) + 1;
+    $madeByMap[$author] = $nextAuthor;
   }
-  return $prefix . $madeByMap[ $author ];
+  
+  return $prefix . $madeByMap[$author];
 }
 
 
