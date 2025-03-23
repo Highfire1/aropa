@@ -64,7 +64,7 @@ class Responses {
     $response = $this->xml->createElement('response');
     $this->responses->appendChild($response);
     foreach ($ids as $f => $id)
-      $response->setAttribute($f, $id);
+      $response->setAttribute($f, $id ?? '');
     return $response;
   }
 
