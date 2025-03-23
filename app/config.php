@@ -54,11 +54,11 @@ define("LOG_ERRORS", 'log' );
 
 //- The HOST is the IP address of the database server.  If the server
 //- listens on a non-standard port, then use the syntax "hostname:port"
-define("AROPA_DB_HOST", $_SERVER['DB_HOST']);
-if (empty($_SERVER['DB_PORT']))
+define("AROPA_DB_HOST", getenv('DB_HOST'));
+if (empty(getenv('DB_PORT')))
   define("AROPA_DB_PORT", '3306');
 else
-  define("AROPA_DB_PORT", $_SERVER['DB_PORT']);
+  define("AROPA_DB_PORT", getenv('DB_PORT'));
 
 //- A MySQL user and password.  This should be a restricted user, with
 //- SELECT, INSERT, UPDATE, DELETE
@@ -72,12 +72,12 @@ else
 //-   SET PASSWORD FOR aropa = PASSWORD('SECRET PASSWORD');
 //- You can use the mkPasswd.php utility to generate a random password.
 
-define("AROPA_DB_USER", $_SERVER['DB_USERNAME']);
-define("AROPA_DB_PASSWORD", $_SERVER['DB_PASSWORD']);
+define("AROPA_DB_USER", getenv('DB_USERNAME'));
+define("AROPA_DB_PASSWORD", getenv('DB_PASSWORD'));
 
 //- The MySQL database to use (i.e., the database selected at the time
 //- you 'source'd tables.sql)
-define("AROPA_DB_DATABASE", $_SERVER['DB_DATABASE']);
+define("AROPA_DB_DATABASE", getenv('DB_DATABASE'));
 
 
 //- Set USE_DATABASE_SESSION to true if you want session data to be

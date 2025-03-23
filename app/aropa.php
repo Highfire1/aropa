@@ -346,7 +346,7 @@ function itemsToString( $arr ) {
 
 
 function stringToItems( $str ) {
-  parse_str( $str ?? '', $arr );
+  parse_str( isset($str) ? $str : '', $arr );
   foreach( $arr as $k => $v )
     $arr[ $k ] = explode( ',', $v );
   return $arr;
@@ -364,8 +364,8 @@ function itemCode( $idx, $numItems ) {
 }
 
 function changedMarks( $oldStr, $newStr, $allItems ) {
-  parse_str( $oldStr ?? '', $oldMarks );
-  parse_str( $newStr ?? '', $newMarks );
+  parse_str( isset($oldStr) ? $oldStr : '', $oldMarks );
+  parse_str( isset($newStr) ? $newStr : '', $newMarks );
   $changes = '';
   foreach( $newMarks as $item => $mark )
     if( ! isset( $oldMarks[ $item ] ) || $oldMarks[ $item ] != $mark )
@@ -418,9 +418,9 @@ function checkPostedChoices( $choiceItems ) {
 }
 
 function commentLabels($assmt) {
-  parse_str($assmt['commentItems'] ?? '', $commentItems);
+  parse_str(isset($assmt['commentItems']) ? $assmt['commentItems'] : '', $commentItems);
   if (!empty($assmt['commentLabels'])) {
-    parse_str($assmt['commentLabels'] ?? '', $commentLabels);
+    parse_str(isset($assmt['commentLabels']) ? $assmt['commentLabels'] : '', $commentLabels);
     foreach ($commentLabels as $item => $label)
       if (isset($commentItems[$item]) && !empty(trim($label)))
 	$commentItems[$item] = $label;
@@ -457,7 +457,7 @@ function setPreference( $attrib, $value ) {
   if( ! $acct )
     return;
 
-  parse_str($acct['prefs'] ?? '', $prefs);
+  parse_str(isset($acct['prefs']) ? $acct['prefs'] : '', $prefs);
   $prefs[ $attrib ] = $value; //- add or replace
   checked_mysql_query( 'UPDATE User SET prefs = ' . quote_smart( itemsToString( $prefs ) )
                        . " WHERE userID = $userID" );
@@ -1604,7 +1604,7 @@ else
 // If asked by the caller, also return to a previous page
 if( isset( $_REQUEST['resume'] ) ) {
   $tmp = $_REQUEST;
-  parse_str(rawurldecode($_REQUEST['resume']) ?? '', $_REQUEST);
+  parse_str(rawurldecode(isset($_REQUEST['resume']) ? $_REQUEST['resume'] : ''), $_REQUEST);
   $action = empty( $_REQUEST['action'] ) ? 'home' : $_REQUEST['action'];
   $cmd2 = findCommand( $action );
   $content->pushContent( HTML::hr( ) );

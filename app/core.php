@@ -42,7 +42,7 @@ function Sprintf_( /*...*/ ) {
   $fmt = array_shift( $args );
   $hargs = array( );
   foreach( $args as $a )
-    $hargs[] = htmlentities( $a ?? '');
+    $hargs[] = htmlentities( $a !== null ? $a : '');
   return HTML::raw( vsprintf( $fmt, $hargs ));
 }
 
@@ -227,8 +227,12 @@ function ensureDBconnected($whereAmI = null) {
     $db = new mysqli(AROPA_DB_HOST, AROPA_DB_USER, AROPA_DB_PASSWORD, AROPA_DB_DATABASE, AROPA_DB_PORT);
     if ($db->connect_errno)
       printDocumentAndExit(_('Database unavailable'),
-			   HTML(HTML::h1(_('Unable to connect to the database server: '), $db->connect_error),
-				warning(_('This may be just a temporary problem.  Try again later, and if the problem is still present then contact your instructor.'))));
+         HTML(HTML::h1(_('Unable to connect to the database server: '), $db->connect_error),
+          warning(_('This may be just a temporary problem.  Try again later, and if the problem is still present then contact your instructor.')),
+          HTML::p("DB Host: " . AROPA_DB_HOST),
+          HTML::p("DB User: " . AROPA_DB_USER),
+          HTML::p("DB Name: " . AROPA_DB_DATABASE), 
+          HTML::p("DB Port: " . AROPA_DB_PORT)));
   }
 
   $db->set_charset('utf8mb4');
@@ -364,7 +368,7 @@ function getInstitution($instID = null) {
     $inst = $rs->fetch_object();
     if (! $inst)
       $inst = (object)array('instID'=>$instID, 'longname'=>'?', 'shortname'=>'?', 'features'=>'');
-    parse_str($inst->features ?? '', $features);
+    parse_str(isset($inst->features) ? $inst->features : '', $features);
     unset($features['LTI_SECRET']);
     unset($features['LTI_CONSUMER_KEY']);
     unset($features['LDAP_SERVER']);
@@ -382,7 +386,7 @@ function institutionHasFeature( $f, $instID = null ) {
 }
 
 function addMarks( &$marks, $mstr ) {
-  parse_str($mstr ?? '', $marksP);
+  parse_str(isset($mstr) ? $mstr : '', $marksP);
   foreach( $marksP as $item => $m ) {
     if( ! isset( $marks[ $item ] ) )
       $marks[ $item ] = array( );
