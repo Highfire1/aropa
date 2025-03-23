@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   php-apache:
     ports:
@@ -6,6 +5,18 @@ services:
     build: './build/php'
     volumes:
       - ./app:/var/www/html
+    environment:
+      DB_HOST: "mysql"
+      DB_USERNAME: "root"
+      DB_PASSWORD: "aropa"
+      DB_DATABASE: "aropa"
+      # AROPA_DB_HOST: "mysql"
+      # AROPA_DB_USERNAME: "root"
+      # AROPA_DB_PASSWORD: "aropa"
+      # AROPA_DB_DATABASE: "aropa"
+    depends_on:
+      - mysql
+     
   mysql:
     ports:
       - "3306:3306"
@@ -14,7 +25,7 @@ services:
       MYSQL_ROOT_PASSWORD: "aropa"
       MYSQL_DATABASE: "aropa"
     volumes:
-      - dbData:/var/lib/mysql
+      - ./volumes/dbData:/var/lib/mysql
 volumes:
   app:
-  dbData:
+  # dbData:

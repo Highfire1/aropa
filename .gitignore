@@ -13,3 +13,4 @@ composer.phar
 go-pear.phar
 .DS_Store
 node_modules
+volumes/
